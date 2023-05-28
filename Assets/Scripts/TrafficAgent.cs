@@ -13,7 +13,10 @@ public class TrafficAgent : MonoBehaviour
     [Header("Agent settings")]
 
     public float acceleration;
+    public float deceleration;
     public float maxSpeed;
+    public float angularAcceleration;
+    public float maxAngularVelocity;
 
     [Header("Thresholds")]
 
@@ -29,15 +32,28 @@ public class TrafficAgent : MonoBehaviour
 
 	private void Update()
 	{
+        UpdatePhysics();
+
         if (targetNode == null)
         {
             Reset();
             return;
         }
-        
-        var moveVector = Vector3.MoveTowards(transform.position, targetNode.transform.position, maxSpeed * Time.deltaTime);
-        transform.position = moveVector;
 
+        UpdateNavigation();
+        UpdateSteering();
+    }
+
+    //: Private Methods
+
+    private void UpdatePhysics()
+    {
+        transform.Rotate(Vector3.up, angularVelocity);
+        transform.position += velocity * Time.deltaTime * transform.forward;
+    }
+
+    private void UpdateNavigation()
+    {
         if ((targetNode.transform.position - transform.position).sqrMagnitude >= nodeReachedThreshold)
         {
             return;
@@ -54,7 +70,42 @@ public class TrafficAgent : MonoBehaviour
         SetTarget(newTarget);
     }
 
-    //: Private Methods
+    private void UpdateSteering()
+    {
+        UpdateRotation();
+        UpdateAcceleration();
+    }
+
+    private void UpdateRotation()
+    {
+        var toTarget = targetNode.transform.position - transform.position;
+
+        var angleToTarget = Vector3.SignedAngle(transform.forward, toTarget, Vector3.up);
+        Debug.Log(angleToTarget);
+        if (angleToTarget > 0.0f)
+        {
+            angularVelocity += angularAcceleration * Time.deltaTime;
+        }
+        else if (angleToTarget < 0.0f)
+        {
+            angularVelocity -= angularAcceleration * Time.deltaTime;
+        }
+    }
+
+    private void UpdateAcceleration()
+    {
+        var remainingDistance = (targetNode.transform.position - transform.position).magnitude;
+        var decelerationDistance = (velocity * velocity) / (2.0f * deceleration);
+
+        if (remainingDistance <= decelerationDistance)
+        {
+            velocity = Mathf.MoveTowards(velocity, 0.0f, deceleration * Time.deltaTime);
+        }
+        else
+        {
+            velocity = Mathf.MoveTowards(velocity, maxSpeed, acceleration * Time.deltaTime);
+        }
+    }
 
     private void Reset(int attempts = 0)
     {
@@ -99,11 +150,14 @@ public class TrafficAgent : MonoBehaviour
     private void SetTarget(NetworkNode newTarget)
     {
         targetNode = newTarget;
-        transform.LookAt(targetNode.transform.position, Vector3.up);
+        //transform.LookAt(targetNode.transform.position, Vector3.up);
     }
 
     //: Private variables
 
     private NetworkNode startNode;
     private NetworkNode targetNode;
+
+    private float velocity;
+    private float angularVelocity;
 }
