@@ -10,8 +10,8 @@ public class RoadNetwork : MonoBehaviour
 	public float editorNodeOffset;
 
 	public List<TrafficAgent> agents;
-	public List<NetworkNode> nodes;
 
+	public List<NetworkNode> nodes => new List<NetworkNode>(GetComponentsInChildren<NetworkNode>());
 
 	void Start()
 	{
@@ -67,6 +67,3 @@ public class RoadNetwork : MonoBehaviour
         }
     }
 }
-
-// TODO: Move to own class, add logic
-public struct TrafficAgent { }
