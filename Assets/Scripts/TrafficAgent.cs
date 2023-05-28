@@ -72,7 +72,7 @@ public class TrafficAgent : MonoBehaviour
 
     private void UpdateSteering()
     {
-        UpdateRotation();
+        //UpdateRotation();
         UpdateAcceleration();
     }
 
@@ -84,11 +84,11 @@ public class TrafficAgent : MonoBehaviour
         Debug.Log(angleToTarget);
         if (angleToTarget > 0.0f)
         {
-            angularVelocity += angularAcceleration * Time.deltaTime;
+            angularVelocity = Mathf.MoveTowards(angularVelocity, maxAngularVelocity, angularAcceleration * Time.deltaTime);
         }
         else if (angleToTarget < 0.0f)
         {
-            angularVelocity -= angularAcceleration * Time.deltaTime;
+            angularVelocity = Mathf.MoveTowards(angularVelocity, -maxAngularVelocity, -angularAcceleration * Time.deltaTime);
         }
     }
 
@@ -150,7 +150,7 @@ public class TrafficAgent : MonoBehaviour
     private void SetTarget(NetworkNode newTarget)
     {
         targetNode = newTarget;
-        //transform.LookAt(targetNode.transform.position, Vector3.up);
+        transform.LookAt(targetNode.transform.position, Vector3.up);
     }
 
     //: Private variables
