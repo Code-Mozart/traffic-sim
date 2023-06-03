@@ -3,7 +3,7 @@ using UnityEngine;
 public interface ITrafficAgent
 {
     // target position in world space
-    public Vector3 target
+    public Vector3 Target
     {
         get;
 
@@ -12,7 +12,7 @@ public interface ITrafficAgent
     }
 
     // position of the next target (the target after the current target) in world space
-    public Vector3 nextTarget
+    public Vector3 NextTarget
     {
         get;
     
@@ -20,18 +20,18 @@ public interface ITrafficAgent
         set;
     }
 
-    public float speedLimit
+    public float SpeedLimit
     {
         get;
         set;
     }
 
-    public float speed
+    public float Speed
     {
         get;
     }
 
-    public float maxSpeed 
+    public float MaxSpeed 
     {
         get;
         set;
