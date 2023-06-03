@@ -3,7 +3,7 @@ using UnityEngine;
 public interface ITrafficAgent
 {
     // target position in world space
-    public Vector3 Target
+    public Vector3? Target
     {
         get;
 
@@ -12,7 +12,7 @@ public interface ITrafficAgent
     }
 
     // position of the next target (the target after the current target) in world space
-    public Vector3 NextTarget
+    public Vector3? NextTarget
     {
         get;
     
