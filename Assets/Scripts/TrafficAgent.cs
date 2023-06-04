@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(VehicleController))]
 public class TrafficAgent : MonoBehaviour
 {
     //: Editor Properties
@@ -9,14 +10,6 @@ public class TrafficAgent : MonoBehaviour
     [Header("References")]
 
     public RoadNetwork network;
-
-    [Header("Agent settings")]
-
-    public float acceleration;
-    public float deceleration;
-    public float maxSpeed;
-    public float angularAcceleration;
-    public float maxAngularVelocity;
 
     [Header("Thresholds")]
 
@@ -27,13 +20,12 @@ public class TrafficAgent : MonoBehaviour
 
 	private void Start()
 	{
+        vehicleController = GetComponent<VehicleController>();
         Reset();
 	}
 
 	private void Update()
 	{
-        UpdatePhysics();
-
         if (targetNode == null)
         {
             Reset();
@@ -41,16 +33,9 @@ public class TrafficAgent : MonoBehaviour
         }
 
         UpdateNavigation();
-        UpdateSteering();
     }
 
     //: Private Methods
-
-    private void UpdatePhysics()
-    {
-        transform.Rotate(Vector3.up, angularVelocity);
-        transform.position += velocity * Time.deltaTime * transform.forward;
-    }
 
     private void UpdateNavigation()
     {
@@ -59,51 +44,25 @@ public class TrafficAgent : MonoBehaviour
             return;
         }
 
-        var newTarget = RandomNode(targetNode.destinations);
-        if (newTarget == null)
+        if (nextTargetNode == null)
         {
-            Reset();
-            return;
-        }
+            var newTarget = RandomNode(targetNode.destinations);
+            if (newTarget == null)
+            {
+                Reset();
+                return;
+            }
 
-        startNode = targetNode;
-        SetTarget(newTarget);
-    }
-
-    private void UpdateSteering()
-    {
-        //UpdateRotation();
-        UpdateAcceleration();
-    }
-
-    private void UpdateRotation()
-    {
-        var toTarget = targetNode.transform.position - transform.position;
-
-        var angleToTarget = Vector3.SignedAngle(transform.forward, toTarget, Vector3.up);
-        Debug.Log(angleToTarget);
-        if (angleToTarget > 0.0f)
-        {
-            angularVelocity = Mathf.MoveTowards(angularVelocity, maxAngularVelocity, angularAcceleration * Time.deltaTime);
-        }
-        else if (angleToTarget < 0.0f)
-        {
-            angularVelocity = Mathf.MoveTowards(angularVelocity, -maxAngularVelocity, -angularAcceleration * Time.deltaTime);
-        }
-    }
-
-    private void UpdateAcceleration()
-    {
-        var remainingDistance = (targetNode.transform.position - transform.position).magnitude;
-        var decelerationDistance = (velocity * velocity) / (2.0f * deceleration);
-
-        if (remainingDistance <= decelerationDistance)
-        {
-            velocity = Mathf.MoveTowards(velocity, 0.0f, deceleration * Time.deltaTime);
-        }
+            startNode = targetNode;
+            SetTarget(newTarget, null);
+        }        
         else
         {
-            velocity = Mathf.MoveTowards(velocity, maxSpeed, acceleration * Time.deltaTime);
+            var newNextTarget = RandomNode(nextTargetNode.destinations);
+            startNode = targetNode;
+            targetNode = nextTargetNode;
+            nextTargetNode = newNextTarget;
+            SetTarget(targetNode, nextTargetNode);
         }
     }
 
@@ -133,7 +92,7 @@ public class TrafficAgent : MonoBehaviour
         }
 
         Debug.Log("Resetting target to '" + newTarget.gameObject.name + "'");
-        SetTarget(newTarget);
+        SetTarget(newTarget, RandomNode(newTarget.destinations));
     }
 
     private NetworkNode RandomNode(List<NetworkNode> nodes)
@@ -147,17 +106,19 @@ public class TrafficAgent : MonoBehaviour
         return nodes[randomIndex];
     }
 
-    private void SetTarget(NetworkNode newTarget)
+    private void SetTarget(NetworkNode newTarget, NetworkNode newNextTarget)
     {
         targetNode = newTarget;
-        transform.LookAt(targetNode.transform.position, Vector3.up);
+        nextTargetNode = newNextTarget;
+        ((ITrafficAgent)vehicleController).Target = targetNode.transform.position;
+        ((ITrafficAgent)vehicleController).NextTarget = nextTargetNode.transform.position;
     }
 
     //: Private variables
 
     private NetworkNode startNode;
     private NetworkNode targetNode;
+    private NetworkNode nextTargetNode;
 
-    private float velocity;
-    private float angularVelocity;
+    private VehicleController vehicleController;
 }
