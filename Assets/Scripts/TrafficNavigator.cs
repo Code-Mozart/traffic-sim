@@ -17,9 +17,12 @@ public class TrafficNavigator : MonoBehaviour
     public float nodeReachedThreshold;
     public int maxResetAttempts = 100;
 
-    [Header("Thresholds")]
+    [Header("Distance Holder")]
 
     public float targetDistanceToTraffic = 10f;
+
+    public float scanningAngle = 90f;
+    public int scanningSteps = 5;
 
     //: Unity Callbacks
 
@@ -41,19 +44,33 @@ public class TrafficNavigator : MonoBehaviour
 
     //: Private Methods
     private void scanTrafficForward(){
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, targetDistanceToTraffic))
-        {
-            if (hit.collider.gameObject.tag == "Traffic")
+        bool hasHit = false;
+        Vector3 location = Vector3.zero;
+        for(int i = 0; i<scanningSteps; i++){
+            RaycastHit hit;
+            float angle = (scanningAngle/scanningSteps)*i-(scanningAngle/2);
+            print(angle);
+            Vector3 direction = Quaternion.AngleAxis(angle, transform.up) * transform.forward;
+            if (Physics.Raycast(transform.position, direction, out hit, targetDistanceToTraffic))
+            {
+                if (hit.collider.gameObject.tag == "Traffic")
+                {
+                    Debug.Log("TrafficAgent ahead");
+                    location = hit.collider.gameObject.transform.position;
+                    hasHit = true;
+                }
+            }
+        }
+
+        if (hasHit == true)
             {
                 Debug.Log("TrafficAgent ahead");
-                agent.Target = hit.collider.gameObject.transform.position;
+                agent.Target = location;
                 agent.NextTarget = null;
             } else {
                 agent.Target = targetNode.transform.position;
                 agent.NextTarget = nextTargetNode.transform.position;
             }
-        }
     }
 
     private void UpdateNavigation()

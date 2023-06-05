@@ -743,6 +743,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Traffic Agent
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 20f5d0eefe9c64b9aa2047b6ae2b903a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20f5d0eefe9c64b9aa2047b6ae2b903a, type: 3}
 --- !u!1 &980794523 stripped
@@ -770,6 +774,24 @@ MonoBehaviour:
   maxAngularVelocity: 60
   nodeReachedThreshold: 0.001
   maxResetAttempts: 100
+--- !u!114 &980794525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980794523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e83aa7bdae2483ab01c91c49fb3957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  network: {fileID: 274899715}
+  nodeReachedThreshold: 0
+  maxResetAttempts: 100
+  targetDistanceToTraffic: 10
+  scanningAngle: 90
+  scanningSteps: 5
 --- !u!1 &1282181754
 GameObject:
   m_ObjectHideFlags: 0
