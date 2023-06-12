@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TrafficNavigator : MonoBehaviour
 {
-//: Editor Properties
+    //: Editor Properties
 
     [Header("References")]
 
@@ -28,14 +28,14 @@ public class TrafficNavigator : MonoBehaviour
 
     //: Unity Callbacks
 
-	private void Start()
-	{
+    private void Start()
+    {
         agent = GetComponent<ITrafficAgent>();
         Reset();
-	}
+    }
 
-	private void Update()
-	{
+    private void Update()
+    {
         if (targetNode == null)
         {
             Reset();
@@ -47,18 +47,18 @@ public class TrafficNavigator : MonoBehaviour
     }
 
     //: Private Methods
-    private void scanTrafficForward(){
+    private void scanTrafficForward()
+    {
         bool hasHit = false;
         Vector3 location = Vector3.zero;
         for(int i = 0; i<scanningSteps; i++){
             RaycastHit hit;
             float angle = (scanningAngle/scanningSteps)*i-(scanningAngle/2);
-            print(angle);
             Debug.DrawRay(transform.position, Quaternion.AngleAxis(angle, transform.up) * transform.forward * targetDistanceToTraffic, Color.red);
             Vector3 direction = Quaternion.AngleAxis(angle, transform.up) * transform.forward;
             if (Physics.Raycast(transform.position, direction, out hit, targetDistanceToTraffic,trafficLayer))
             {
-                    Debug.Log("TrafficAgent ahead");
+                    print("TrafficAgent ahead");
                     location = hit.collider.gameObject.transform.position;
                     hasHit = true;
             }
@@ -72,6 +72,7 @@ public class TrafficNavigator : MonoBehaviour
                 agent.Target = targetNode.transform.position;
                 agent.NextTarget = nextTargetNode.transform.position;
             }
+            
     }
 
     private void UpdateNavigation()
@@ -90,7 +91,7 @@ public class TrafficNavigator : MonoBehaviour
         }
 
         startNode = targetNode;
-        SetTarget(newTarget,newNextTarget);
+        SetTarget(newTarget, newNextTarget);
     }
 
     private void Reset(int attempts = 0)
@@ -120,7 +121,7 @@ public class TrafficNavigator : MonoBehaviour
         }
 
         Debug.Log("Resetting target to '" + newTarget.gameObject.name + "'");
-        SetTarget(newTarget,newNextTarget);
+        SetTarget(newTarget, newNextTarget);
     }
 
     private NetworkNode RandomNode(List<NetworkNode> nodes)
@@ -129,18 +130,18 @@ public class TrafficNavigator : MonoBehaviour
         {
             return null;
         }
-        
+
         var randomIndex = Random.Range(0, nodes.Count);
         return nodes[randomIndex];
     }
 
-    private void SetTarget(NetworkNode newTarget,NetworkNode nextTarget)
+    private void SetTarget(NetworkNode newTarget, NetworkNode nextTarget)
     {
         targetNode = newTarget;
         nextTargetNode = nextTarget;
 
-        agent.Target = (targetNode==null)?null:targetNode.transform.position;
-        agent.NextTarget = (nextTargetNode==null)?null:nextTargetNode.transform.position;
+        agent.Target = (targetNode == null) ? null : targetNode.transform.position;
+        agent.NextTarget = (nextTargetNode == null) ? null : nextTargetNode.transform.position;
     }
 
     //: Private variables
