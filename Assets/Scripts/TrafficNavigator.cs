@@ -21,6 +21,8 @@ public class TrafficNavigator : MonoBehaviour
 
     public float targetDistanceToTraffic = 10f;
 
+    public LayerMask trafficLayer;
+
     public float scanningAngle = 90f;
     public int scanningSteps = 5;
 
@@ -28,6 +30,7 @@ public class TrafficNavigator : MonoBehaviour
 
 	private void Start()
 	{
+        agent = GetComponent<ITrafficAgent>();
         Reset();
 	}
 
@@ -40,6 +43,7 @@ public class TrafficNavigator : MonoBehaviour
         }
 
         UpdateNavigation();
+        scanTrafficForward();
     }
 
     //: Private Methods
@@ -50,21 +54,18 @@ public class TrafficNavigator : MonoBehaviour
             RaycastHit hit;
             float angle = (scanningAngle/scanningSteps)*i-(scanningAngle/2);
             print(angle);
+            Debug.DrawRay(transform.position, Quaternion.AngleAxis(angle, transform.up) * transform.forward * targetDistanceToTraffic, Color.red);
             Vector3 direction = Quaternion.AngleAxis(angle, transform.up) * transform.forward;
-            if (Physics.Raycast(transform.position, direction, out hit, targetDistanceToTraffic))
+            if (Physics.Raycast(transform.position, direction, out hit, targetDistanceToTraffic,trafficLayer))
             {
-                if (hit.collider.gameObject.tag == "Traffic")
-                {
                     Debug.Log("TrafficAgent ahead");
                     location = hit.collider.gameObject.transform.position;
                     hasHit = true;
-                }
             }
         }
 
         if (hasHit == true)
             {
-                Debug.Log("TrafficAgent ahead");
                 agent.Target = location;
                 agent.NextTarget = null;
             } else {

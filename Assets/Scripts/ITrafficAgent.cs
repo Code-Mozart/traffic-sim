@@ -36,4 +36,9 @@ public interface ITrafficAgent
         get;
         set;
     }
+
+    public float DistanceToTarget
+    {
+        get;
+    }
 }
