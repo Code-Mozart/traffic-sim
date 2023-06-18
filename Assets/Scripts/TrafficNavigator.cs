@@ -66,11 +66,9 @@ public class TrafficNavigator : MonoBehaviour
 
         if (hasHit == true)
             {
-                agent.Target = location;
-                agent.NextTarget = null;
+                agent.SpeedLimit = 0;
             } else {
-                agent.Target = targetNode.transform.position;
-                agent.NextTarget = nextTargetNode.transform.position;
+                agent.SpeedLimit = agent.MaxSpeed;
             }
             
     }
