@@ -20,6 +20,8 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     public float maxSpeed;
     [Tooltip("The time it takes the vehicle to turn to any angle in seconds.")]
     public float turnTime;
+    [Tooltip("The multiplier on the speed limit for the minimum speed while turning")]
+    public float minTurnSpeedMultiplier;
 
     [Header("Thresholds")]
 
@@ -150,8 +152,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         {
             _route.RemoveAt(0);
 
-            var angleDifference = Vector3.SignedAngle(transform.forward, ToNext(), Vector3.up);
-            _angularVelocity = angleDifference / turnTime;
+            _angularVelocity = SignedAngleToNext() / turnTime;
             _turnTimer = turnTime;
         }
     }
@@ -167,22 +168,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
             return;
         }
 
-        float desiredSpeed;
-        var distanceToBreak = Kinematics.s(v: _velocity, a: deceleration);
-        Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
-
-        // Debug: Draw velocity
-        Debug.DrawRay(transform.position + 0.01f * Vector3.down, transform.forward * distanceToBreak, Color.red);
-
-        if (((INetworkAgent)this).RemainingDistance <= distanceToBreak)
-        {
-            desiredSpeed = 0.0f;
-        }
-        else
-        {
-            desiredSpeed = Mathf.Min(maxSpeed, _speedLimit);
-        }
-
+        float desiredSpeed = CalculateDesiredSpeed();
         if (_velocity > desiredSpeed)
         {
             _velocity = Mathf.MoveTowards(_velocity, desiredSpeed, deceleration * Time.deltaTime);
@@ -257,6 +243,42 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         var toNext = ((INetworkAgent)this).Next.transform.position - transform.position;
         toNext = new Vector3(toNext.x, 0.0f, toNext.z);
         return toNext;
+    }
+
+    private float SignedAngleToNext()
+    {
+        return Vector3.SignedAngle(transform.forward, ToNext(), Vector3.up);
+    }
+
+    private float CalculateDesiredSpeed()
+    {
+        var distanceToBreak = Kinematics.s(v: _velocity, a: deceleration);
+        Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
+
+        // Debug: Draw velocity
+        Debug.DrawRay(transform.position + 0.01f * Vector3.down, transform.forward * distanceToBreak, Color.red);
+
+        if (((INetworkAgent)this).RemainingDistance <= distanceToBreak)
+        {
+            return 0.0f;
+        }
+
+        var desiredSpeed = Mathf.Min(maxSpeed, _speedLimit);
+        var distanceToNext = ToNext().magnitude;
+
+        if (_route.Count > 2 && distanceToNext <= distanceToBreak)
+        {
+            var toOneAfter = _route[2].transform.position - _route[1].transform.position;
+            var dot = Vector3.Dot(transform.forward, toOneAfter.normalized);
+            var desiredTurnSpeed = Mathf.Max(dot * desiredSpeed, minTurnSpeedMultiplier * _speedLimit);
+            var distanceToTurnSpeed = Kinematics.s(v: _velocity - desiredTurnSpeed, a: deceleration);
+            if (distanceToTurnSpeed <= distanceToNext)
+            {
+                return desiredTurnSpeed;
+            }
+        }
+        
+        return desiredSpeed;
     }
 
     //: Private variables
