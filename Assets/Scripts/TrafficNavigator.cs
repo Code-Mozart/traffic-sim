@@ -16,7 +16,8 @@ public class TrafficNavigator : MonoBehaviour
 
     [Header("Distance Holder")]
 
-    public float targetDistanceToTraffic = 10f;
+    public float targetDistanceToTraffic = 1f;
+    public float stoppingDistanceToTraffic = .75f;
 
     public LayerMask trafficLayer;
 
@@ -38,27 +39,61 @@ public class TrafficNavigator : MonoBehaviour
     //: Private Methods
     private void scanTrafficForward()
     {
-        bool hasHit = false;
+        bool hasHitSlowdown = false;
+        bool hasHitStop = false;
+        float? speed = null;
         Vector3 location = Vector3.zero;
-        for(int i = 0; i<scanningSteps; i++){
+        for (int i = 0; i < scanningSteps; i++)
+        {
             RaycastHit hit;
-            float angle = (scanningAngle/scanningSteps)*i-(scanningAngle/2);
+            float angle = (scanningAngle / scanningSteps) * i - (scanningAngle / 2);
             Debug.DrawRay(transform.position, Quaternion.AngleAxis(angle, transform.up) * transform.forward * targetDistanceToTraffic, Color.red);
             Vector3 direction = Quaternion.AngleAxis(angle, transform.up) * transform.forward;
-            if (Physics.Raycast(transform.position, direction, out hit, targetDistanceToTraffic,trafficLayer))
+            if (Physics.Raycast(transform.position, direction, out hit, stoppingDistanceToTraffic, trafficLayer))
             {
-                    print("TrafficAgent ahead");
-                    location = hit.collider.gameObject.transform.position;
-                    hasHit = true;
+                print("Stop");
+                hasHitStop = true;
+                break;
+            }
+
+            if (Physics.Raycast(transform.position, direction, out hit, targetDistanceToTraffic, trafficLayer))
+            {
+                print("Slowdown");
+                location = hit.collider.gameObject.transform.position;
+                if (hit.collider.gameObject.GetComponent<INetworkAgent>() != null)
+                {
+                    speed = hit.collider.gameObject.GetComponent<INetworkAgent>().Speed;
+                }
+                else
+                {
+                    speed = null;
+                }
+                hasHitSlowdown = true;
+                break;
             }
         }
 
-        if (hasHit == true)
+        if (hasHitSlowdown == true)
+        {
+            if (speed != null)
+            {
+                agent.SpeedLimit = (float)speed;
+            }
+            else
             {
                 agent.SpeedLimit = 0;
-            } else {
-                agent.SpeedLimit = agent.MaxSpeed;
             }
-            
+        }
+
+        if(hasHitStop == true)
+        {
+            agent.SpeedLimit = 0;
+        }
+
+        if(!hasHitSlowdown && !hasHitStop)
+        {
+            agent.SpeedLimit = agent.MaxSpeed;
+        }
+
     }
 }
