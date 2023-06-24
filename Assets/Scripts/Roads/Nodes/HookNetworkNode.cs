@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class HookNetworkNode : NetworkNode
 {
-    public float searchRadius = 3.0f;
+    public float searchRadius = 1.0f;
     public LayerMask ConnectorNodeLayer;
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, 0.5f);
+        Gizmos.DrawWireSphere(transform.position, 0.25f);
         FindNearbyConnectorNodes();
         NodeOutOfRange();
     }
