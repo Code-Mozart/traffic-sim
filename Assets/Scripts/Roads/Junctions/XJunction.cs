@@ -8,6 +8,7 @@ public class XJunction : MonoBehaviour
 
     [Header("Junction Settings")]
 
+    [SerializeReference]
     public IXJunctionRules rules;
 
     [Header("Junction Nodes")]
@@ -17,6 +18,10 @@ public class XJunction : MonoBehaviour
     public Direction south;
     public Direction west;
 
+    //: Public Attributes
+
+    public ICollection<INetworkAgent> Agents => _agents;
+
     //: Unity Callbacks
 
 	private void Start()
@@ -25,6 +30,13 @@ public class XJunction : MonoBehaviour
 
 	private void Update()
 	{
+        if (rules == null)
+        {
+            Debug.LogWarning("No traffic rules defined for junction " + name);
+            return;
+        }
+
+        rules.Update(this);
     }
 
     private void OnDrawGizmosSelected()
@@ -68,19 +80,24 @@ public class XJunction : MonoBehaviour
 
     public bool AddAgent(INetworkAgent agent)
     {
-        return agents.Add(agent);
+        return _agents.Add(agent);
     }
 
     public bool RemoveAgent(INetworkAgent agent)
     {
-        return agents.Remove(agent);
+        if (_agents.Remove(agent))
+        {
+            agent.IsStopped = false;
+            return true;
+        }
+        return false;
     }
     
     //: Private Methods
 
     //: Private Variables
 
-    private HashSet<INetworkAgent> agents = new HashSet<INetworkAgent>();
+    private HashSet<INetworkAgent> _agents = new HashSet<INetworkAgent>();
 
     //: Structs
 

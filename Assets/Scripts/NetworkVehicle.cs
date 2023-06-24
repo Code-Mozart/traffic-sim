@@ -95,7 +95,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     bool INetworkAgent.IsStopped
     {
         get => _isStopped;
-        set => _isStopped = value;
+        //set => _isStopped = value;
+        set
+        {
+            _isStopped = value;
+            this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
+        }
     }
 
     System.Action<NetworkNode> INetworkAgent.OnNodeReached
@@ -300,7 +305,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     private float CalculateDesiredSpeed()
     {
         var distanceToBreak = Kinematics.s(v: _velocity, a: deceleration);
-        Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
+        //Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
 
         // Debug: Draw velocity
         Debug.DrawRay(transform.position + 0.01f * Vector3.down, transform.forward * distanceToBreak, Color.red);
