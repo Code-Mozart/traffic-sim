@@ -150,10 +150,27 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
         if (ToNext().magnitude <= nodeReachedThreshold)
         {
+            UpdateJunction();
+
             _route.RemoveAt(0);
 
             _angularVelocity = SignedAngleToNext() / turnTime;
             _turnTimer = turnTime;
+        }
+    }
+
+    private void UpdateJunction()
+    {
+        var previousJunction = ((INetworkAgent)this).Previous?.transform?.GetComponentInParent<XJunction>();
+        if (previousJunction)
+        {
+            previousJunction.RemoveAgent(this);
+        }
+
+        var nextJunction = ((INetworkAgent)this).Next?.transform?.GetComponentInParent<XJunction>();
+        if (nextJunction)
+        {
+            nextJunction.AddAgent(this);
         }
     }
 
