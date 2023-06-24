@@ -32,7 +32,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
 	private void Start()
 	{
-        Reset();
+        ResetToNearest();
 	}
 
 	private void Update()
@@ -144,7 +144,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         
         if (((INetworkAgent)this).HasReachedDestination)
         {
-            Reset();
+            ResetToRandom();
             return;
         }
 
@@ -187,6 +187,11 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
         _speedLimit = maxSpeed;
         _isStopped = false;
+    }
+
+    private void ResetToRandom()
+    {
+        Reset();
 
         NetworkNode startNode = null;
         for (int i = 0; i < maxResetAttempts; i++)
@@ -208,6 +213,31 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
         transform.position = startNode.transform.position;
         transform.forward = ToNext();
+    }
+
+    private void ResetToNearest()
+    {
+        var startNode = FindNearestNodeInNetwork();
+        ((INetworkAgent)this).Route = CreateRandomRoute(startNode);
+        transform.forward = ToNext();
+    }
+
+    private NetworkNode FindNearestNodeInNetwork()
+    {
+        Reset();
+
+        var nearestSoFar = network.nodes[0];
+        var minDistance = Vector3.Distance(transform.position, nearestSoFar.transform.position);
+        foreach (var node in network.nodes)
+        {
+            var distance = Vector3.Distance(transform.position, node.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestSoFar = node;
+            }
+        }
+        return nearestSoFar;
     }
 
     private NetworkNode RandomNode(List<NetworkNode> nodes)
