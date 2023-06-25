@@ -33,7 +33,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
 	private void Start()
 	{
-        ResetToNearest();
+        ResetToRandom();
 	}
 
     private void Update()
