@@ -151,6 +151,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1754216254420218093}
+  - component: {fileID: 3991838346509758005}
   m_Layer: 0
   m_Name: MeshTCrossRoad
   m_TagString: Untagged
@@ -175,6 +176,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3991838346509758005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6345641268790122370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1562e038006324191834e17c82a14dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawInEditorOnlyIfSelected: 0
+  editorNodeColor: {r: 0.5943396, g: 0.06391951, b: 0.06391951, a: 1}
+  editorNodeRadius: 0
+  editorNodeOffset: 0
+  agents: []
 --- !u!1001 &71879999009855643
 PrefabInstance:
   m_ObjectHideFlags: 0

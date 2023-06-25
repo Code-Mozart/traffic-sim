@@ -43,7 +43,10 @@ public class ConnectorNetworkNode : NetworkNode
     {
         foreach (HookNetworkNode node in destinations.ToArray())
         {
-            if (Vector3.Distance(node.transform.position, transform.position) > searchRadius)
+            if (node == null)
+            {
+                destinations.Remove(node);
+            } else if (Vector3.Distance(node.transform.position, transform.position) > searchRadius)
             {
                 destinations.Remove(node);
             }
