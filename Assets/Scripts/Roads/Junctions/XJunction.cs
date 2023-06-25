@@ -20,7 +20,7 @@ public class XJunction : MonoBehaviour
 
     //: Public Attributes
 
-    public ICollection<INetworkAgent> Agents => _agents;
+    public List<INetworkAgent> Agents => _agents;
 
     //: Unity Callbacks
 
@@ -78,9 +78,9 @@ public class XJunction : MonoBehaviour
 
     //: Public Methods
 
-    public bool AddAgent(INetworkAgent agent)
+    public void AddAgent(INetworkAgent agent)
     {
-        return _agents.Add(agent);
+        _agents.Add(agent);
     }
 
     public bool RemoveAgent(INetworkAgent agent)
@@ -97,7 +97,7 @@ public class XJunction : MonoBehaviour
 
     //: Private Variables
 
-    private HashSet<INetworkAgent> _agents = new HashSet<INetworkAgent>();
+    private List<INetworkAgent> _agents = new List<INetworkAgent>();
 
     //: Structs
 
@@ -116,6 +116,6 @@ public class XJunction : MonoBehaviour
         public Segment[] forward;
         public Segment[] right;
 
-        public Queue<INetworkAgent> watingAgents;
+        //public Queue<INetworkAgent> watingAgents;
     }
 }

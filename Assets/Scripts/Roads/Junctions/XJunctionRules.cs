@@ -27,11 +27,9 @@ public class XJunctionRule_FirstComeFirstServe : IXJunctionRules
             agent.IsStopped = isJunctionOccupied;
         }
 
-        // Set the first agent to NOT STOPPED.
-        foreach (var agent in allAgentsInJunction)
+        if (allAgentsInJunction.Count > 0)
         {
-            agent.IsStopped = false;
-            break;
+            allAgentsInJunction[0].IsStopped = false;
         }
     }
 
@@ -92,13 +90,13 @@ public class XJunctionRule_FirstComeFirstServe : IXJunctionRules
 
     //: Private Attributes
 
-    private ICollection<INetworkAgent> allAgentsInJunction
+    private List<INetworkAgent> allAgentsInJunction
     {
         get
         {
             if (_agentsInJunction == null)
             {
-                _agentsInJunction = new HashSet<INetworkAgent>();
+                _agentsInJunction = new List<INetworkAgent>();
                 foreach (var agent in _junction.Agents)
                 {
                     if (IsAgentInJunction(agent))
@@ -111,13 +109,13 @@ public class XJunctionRule_FirstComeFirstServe : IXJunctionRules
         }
     }
 
-    private ICollection<INetworkAgent> allAgentsInEntry
+    private List<INetworkAgent> allAgentsInEntry
     {
         get
         {
             if (_agentsInEntry == null)
             {
-                _agentsInEntry = new HashSet<INetworkAgent>();
+                _agentsInEntry = new List<INetworkAgent>();
                 foreach (var agent in _junction.Agents)
                 {
                     if (IsAgentInEntry(agent))
@@ -138,6 +136,6 @@ public class XJunctionRule_FirstComeFirstServe : IXJunctionRules
     //: Private Variables
 
     private XJunction _junction;
-    private HashSet<INetworkAgent> _agentsInJunction;
-    private HashSet<INetworkAgent> _agentsInEntry;
+    private List<INetworkAgent> _agentsInJunction;
+    private List<INetworkAgent> _agentsInEntry;
 }
