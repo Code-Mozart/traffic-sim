@@ -8,8 +8,7 @@ public class XJunction : MonoBehaviour
 
     [Header("Junction Settings")]
 
-    [SerializeReference]
-    public IXJunctionRules rules;
+    public Rules ruleSetting;
 
     [Header("Junction Nodes")]
 
@@ -17,6 +16,10 @@ public class XJunction : MonoBehaviour
     public Direction east;
     public Direction south;
     public Direction west;
+
+    //: Public Variables
+
+    public IXJunctionRules rules;
 
     //: Public Attributes
 
@@ -26,6 +29,7 @@ public class XJunction : MonoBehaviour
 
 	private void Start()
 	{
+        rules = XJunction.FindRules(ruleSetting);
 	}
 
 	private void Update()
@@ -113,6 +117,19 @@ public class XJunction : MonoBehaviour
     
     //: Private Methods
 
+    private static IXJunctionRules FindRules(Rules rules)
+    {
+        switch (rules)
+        {
+            case Rules.None:
+                return null;
+            case Rules.FirstComeFirstServe:
+                return new XJunctionRule_FirstComeFirstServe();
+            default:
+                throw new UnityException("Unsupported rules " + rules);
+        }
+    }
+
     //: Private Variables
 
     private List<INetworkAgent> _agents = new List<INetworkAgent>();
@@ -135,5 +152,11 @@ public class XJunction : MonoBehaviour
         public Segment[] right;
 
         //public Queue<INetworkAgent> watingAgents;
+    }
+
+    public enum Rules
+    {
+        None,
+        FirstComeFirstServe
     }
 }

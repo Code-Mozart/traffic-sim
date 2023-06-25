@@ -216,8 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d7f4975fce6640a698f3257756af9a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rules:
-    rid: -2
+  ruleSetting: 1
   north:
     entry:
       start: {fileID: 744389276921683068}
@@ -318,11 +317,6 @@ MonoBehaviour:
       end: {fileID: 5285866280287771168}
     - start: {fileID: 5285866280287771168}
       end: {fileID: 8033101257704091375}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
 --- !u!1001 &50976912458972898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5191,7 +5185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: origins.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: destinations.Array.size
@@ -5284,7 +5278,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812794512251}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.data[0]
@@ -5660,7 +5654,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816813443317630}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6153168458746641399, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: m_RootOrder
@@ -5745,7 +5739,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: origins.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: destinations.Array.size
@@ -5834,7 +5828,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: origins.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: destinations.Array.size
@@ -5923,7 +5917,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: origins.Array.size
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
+      propertyPath: origins.Array.data[0]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: destinations.Array.size
@@ -6105,7 +6103,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816813806641745}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6153168458746641399, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: m_RootOrder
@@ -6194,7 +6192,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812873089831}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.data[0]
