@@ -135,6 +135,11 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     private void UpdatePhysics()
     {
+        if (!((INetworkAgent)this).Next)
+        {
+            return;
+        }
+
         transform.position = Vector3.MoveTowards(transform.position, ((INetworkAgent)this).Next.transform.position, _velocity * Time.deltaTime);
         transform.Rotate(Vector3.up, _angularVelocity * Time.deltaTime);
     }
@@ -170,15 +175,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     private void UpdateJunction()
     {
         var previousJunction = ((INetworkAgent)this).Previous?.transform?.GetComponentInParent<XJunction>();
-        if (previousJunction)
-        {
-            previousJunction.RemoveAgent(this);
-        }
-
         var nextJunction = ((INetworkAgent)this).Next?.transform?.GetComponentInParent<XJunction>();
-        if (nextJunction)
+
+        if (nextJunction != previousJunction)
         {
-            nextJunction.AddAgent(this);
+            previousJunction?.RemoveAgent(this);
+            nextJunction?.AddAgent(this);
         }
     }
 
@@ -242,15 +244,17 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     private void ResetToNearest()
     {
+        Reset();
+
         var startNode = FindNearestNodeInNetwork();
         ((INetworkAgent)this).Route = CreateRandomRoute(startNode);
+
+        transform.position = startNode.transform.position;
         transform.forward = ToNext();
     }
 
     private NetworkNode FindNearestNodeInNetwork()
     {
-        Reset();
-
         var nearestSoFar = network.nodes[0];
         var minDistance = Vector3.Distance(transform.position, nearestSoFar.transform.position);
         foreach (var node in network.nodes)
@@ -295,7 +299,13 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     private Vector3 ToNext()
     {
-        var toNext = ((INetworkAgent)this).Next.transform.position - transform.position;
+        var next = ((INetworkAgent)this).Next;
+        if (!next)
+        {
+            return transform.forward;
+        }
+
+        var toNext = next.transform.position - transform.position;
         toNext = new Vector3(toNext.x, 0.0f, toNext.z);
         return toNext;
     }

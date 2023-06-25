@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9002957424357311572}
   - component: {fileID: 6424864006874646605}
   - component: {fileID: 2035651310255572215}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: HookNode
   m_TagString: HookNode
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ MonoBehaviour:
   searchRadius: 3
   ConnectorNodeLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
 --- !u!135 &2035651310255572215
 SphereCollider:
   m_ObjectHideFlags: 0

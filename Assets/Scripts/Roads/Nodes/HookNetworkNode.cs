@@ -9,9 +9,10 @@ public class HookNetworkNode : NetworkNode
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, 0.25f);
         FindNearbyConnectorNodes();
         NodeOutOfRange();
+        
+        Gizmos.DrawWireSphere(transform.position, 0.25f);
     }
 
     private void FindNearbyConnectorNodes()
