@@ -179,6 +179,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2449795713761407260}
+  - component: {fileID: 7688271735996645109}
+  - component: {fileID: 4601722875194546579}
   m_Layer: 0
   m_Name: MeshCrossroad
   m_TagString: Untagged
@@ -203,6 +205,142 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7688271735996645109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7967070922634501412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1562e038006324191834e17c82a14dcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawInEditorOnlyIfSelected: 0
+  editorNodeColor: {r: 0.8962264, g: 0.866634, b: 0.866634, a: 1}
+  editorNodeRadius: 0.1
+  editorNodeOffset: 0.2
+  agents: []
+--- !u!114 &4601722875194546579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7967070922634501412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d7f4975fce6640a698f3257756af9a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rules:
+    rid: -2
+  north:
+    entry:
+      start: {fileID: 744389276921683068}
+      end: {fileID: 3074816813726211041}
+    left:
+    - start: {fileID: 3074816813726211041}
+      end: {fileID: 3832984985762404789}
+    - start: {fileID: 3832984985762404789}
+      end: {fileID: 3074816812922735921}
+    - start: {fileID: 3074816812922735921}
+      end: {fileID: 9051930484991506760}
+    - start: {fileID: 9051930484991506760}
+      end: {fileID: 8033101256887603215}
+    forward:
+    - start: {fileID: 3074816813726211041}
+      end: {fileID: 3074816812794512251}
+    right:
+    - start: {fileID: 3074816813726211041}
+      end: {fileID: 1495309355972982132}
+    - start: {fileID: 1495309355972982132}
+      end: {fileID: 3074816814308352971}
+    - start: {fileID: 3074816814308352971}
+      end: {fileID: 7715676356119537106}
+    - start: {fileID: 7715676356119537106}
+      end: {fileID: 8033101256343510567}
+  east:
+    entry:
+      start: {fileID: 744389275674379502}
+      end: {fileID: 3074816813868369468}
+    left:
+    - start: {fileID: 3074816813868369468}
+      end: {fileID: 5980244076757382660}
+    - start: {fileID: 5980244076757382660}
+      end: {fileID: 3074816813521161997}
+    - start: {fileID: 3074816813521161997}
+      end: {fileID: 5987504115409784406}
+    - start: {fileID: 5987504115409784406}
+      end: {fileID: 8033101257704091375}
+    forward:
+    - start: {fileID: 3074816813868369468}
+      end: {fileID: 3074816813806641745}
+    right:
+    - start: {fileID: 3074816813868369468}
+      end: {fileID: 3740508617223807034}
+    - start: {fileID: 3740508617223807034}
+      end: {fileID: 3074816813393777344}
+    - start: {fileID: 3074816813393777344}
+      end: {fileID: 129620061450166578}
+    - start: {fileID: 129620061450166578}
+      end: {fileID: 8033101256183060182}
+  south:
+    entry:
+      start: {fileID: 744389276039128545}
+      end: {fileID: 3074816813380787321}
+    left:
+    - start: {fileID: 3074816813380787321}
+      end: {fileID: 3911822456788149040}
+    - start: {fileID: 3911822456788149040}
+      end: {fileID: 3074816813822123799}
+    - start: {fileID: 3074816813822123799}
+      end: {fileID: 60061290645483694}
+    - start: {fileID: 60061290645483694}
+      end: {fileID: 8033101256343510567}
+    forward:
+    - start: {fileID: 3074816813380787321}
+      end: {fileID: 3074816812873089831}
+    right:
+    - start: {fileID: 3074816813380787321}
+      end: {fileID: 321809690633175086}
+    - start: {fileID: 321809690633175086}
+      end: {fileID: 3074816813454455781}
+    - start: {fileID: 3074816813454455781}
+      end: {fileID: 4224015103707364203}
+    - start: {fileID: 4224015103707364203}
+      end: {fileID: 8033101256887603215}
+  west:
+    entry:
+      start: {fileID: 744389276354861162}
+      end: {fileID: 3074816813547609118}
+    left:
+    - start: {fileID: 3074816813547609118}
+      end: {fileID: 4532780091439788825}
+    - start: {fileID: 4532780091439788825}
+      end: {fileID: 3074816814251201661}
+    - start: {fileID: 3074816814251201661}
+      end: {fileID: 4245164557035684529}
+    - start: {fileID: 4245164557035684529}
+      end: {fileID: 8033101256183060182}
+    forward:
+    - start: {fileID: 3074816813547609118}
+      end: {fileID: 3074816813443317630}
+    right:
+    - start: {fileID: 3074816813547609118}
+      end: {fileID: 6689079966375880800}
+    - start: {fileID: 6689079966375880800}
+      end: {fileID: 3074816813234382493}
+    - start: {fileID: 3074816813234382493}
+      end: {fileID: 5285866280287771168}
+    - start: {fileID: 5285866280287771168}
+      end: {fileID: 8033101257704091375}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &50976912458972898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5162,6 +5300,10 @@ PrefabInstance:
       propertyPath: destinations.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
+      propertyPath: destinations.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6153168458746641399, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -6058,7 +6200,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812873089831}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.data[0]

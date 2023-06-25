@@ -80,7 +80,25 @@ public class XJunction : MonoBehaviour
 
     public void AddAgent(INetworkAgent agent)
     {
+        string ListToString(List<INetworkAgent> agents)
+        {
+            if (agents.Count <= 0)
+            {
+                return "[]";
+            }
+
+            string s = "[";
+            for (int i = 0; i < agents.Count - 1; i++)
+            {
+                s += agents[i].ToString() + ", ";
+            }
+            s += agents[agents.Count - 1] + "]";
+            return s;
+        }
+
+        Debug.Log("Before adding '" + agent + "': " + ListToString(Agents));
         _agents.Add(agent);
+        Debug.Log("After adding '" + agent + "': " + ListToString(Agents));
     }
 
     public bool RemoveAgent(INetworkAgent agent)
