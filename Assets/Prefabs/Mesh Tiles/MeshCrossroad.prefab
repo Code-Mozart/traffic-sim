@@ -108,7 +108,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6016010703307473990}
-  - component: {fileID: 8086004582090813583}
   m_Layer: 0
   m_Name: Nodes
   m_TagString: Untagged
@@ -171,23 +170,6 @@ Transform:
   m_Father: {fileID: 2449795713761407260}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8086004582090813583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6016010703307473991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1562e038006324191834e17c82a14dcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawInEditorOnlyIfSelected: 0
-  editorNodeColor: {r: 0.8962264, g: 0.866634, b: 0.866634, a: 1}
-  editorNodeRadius: 0
-  editorNodeOffset: 0
-  agents: []
 --- !u!1 &7967070922634501412
 GameObject:
   m_ObjectHideFlags: 0
@@ -5178,7 +5160,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812794512251}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6153168458746641399, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: m_RootOrder
@@ -6076,7 +6058,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812873089831}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.data[0]
