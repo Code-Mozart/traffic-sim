@@ -179,7 +179,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2449795713761407260}
-  - component: {fileID: 7688271735996645109}
   - component: {fileID: 4601722875194546579}
   m_Layer: 0
   m_Name: MeshCrossroad
@@ -205,23 +204,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7688271735996645109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7967070922634501412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1562e038006324191834e17c82a14dcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawInEditorOnlyIfSelected: 0
-  editorNodeColor: {r: 0.8962264, g: 0.866634, b: 0.866634, a: 1}
-  editorNodeRadius: 0.1
-  editorNodeOffset: 0.2
-  agents: []
 --- !u!114 &4601722875194546579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5208,6 +5190,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
+      propertyPath: origins.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: destinations.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5298,7 +5284,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812794512251}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.data[0]
@@ -5674,7 +5660,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816813443317630}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6153168458746641399, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: m_RootOrder
@@ -5756,6 +5742,10 @@ PrefabInstance:
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: searchRadius
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
+      propertyPath: origins.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6424864006874646605, guid: 9704721ad554dc341ac1ea3412766e99, type: 3}
       propertyPath: destinations.Array.size
@@ -6113,6 +6103,10 @@ PrefabInstance:
       propertyPath: origins.Array.data[0]
       value: 
       objectReference: {fileID: 3074816813806641745}
+    - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
+      propertyPath: destinations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6153168458746641399, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -6200,7 +6194,7 @@ PrefabInstance:
       objectReference: {fileID: 3074816812873089831}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4325257554605683373, guid: 4e51676aa414f9f43b9d28105935e39e, type: 3}
       propertyPath: destinations.Array.data[0]
