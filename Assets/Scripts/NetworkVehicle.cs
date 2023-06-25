@@ -27,6 +27,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     public float nodeReachedThreshold;
     public int maxResetAttempts = 100;
+    public int maxRouteLength = 1000;
 
     //: Unity Callbacks
 
@@ -279,7 +280,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         route.Add(start);
 
         var currentLast = start;
-        while (currentLast.destinations.Count > 0)
+        for (int i = 0; i < maxRouteLength && currentLast.destinations.Count > 0; i++)
         {
             var nextNode = RandomNode(currentLast.destinations);
             // nextNode cant be null with the current implementation of RandomNode()
