@@ -232,7 +232,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163667005}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.23, y: 0.039, z: 2.61}
+  m_LocalPosition: {x: -2.19, y: 0.039, z: -1.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -254,7 +254,8 @@ MonoBehaviour:
   isShapingCurve: 0
   origins:
   - {fileID: 475269440}
-  destinations: []
+  destinations:
+  - {fileID: 1865272011}
 --- !u!1 &475269439
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +289,6 @@ MonoBehaviour:
   origins:
   - {fileID: 840719239}
   destinations:
-  - {fileID: 1865272011}
   - {fileID: 163667007}
 --- !u!4 &475269441
 Transform:
@@ -917,7 +917,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isShapingCurve: 0
   origins:
-  - {fileID: 475269440}
+  - {fileID: 163667007}
   destinations: []
 --- !u!4 &1865272012
 Transform:
@@ -927,7 +927,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865272010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0.039, z: 2.77}
+  m_LocalPosition: {x: -3.6, y: 0.039, z: -0.973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1025,5 +1025,6 @@ MonoBehaviour:
   deceleration: 0.3
   maxSpeed: 1.5
   turnTime: 0.7
+  minTurnSpeedMultiplier: 0.15
   nodeReachedThreshold: 0.001
   maxResetAttempts: 100
