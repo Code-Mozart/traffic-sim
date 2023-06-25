@@ -19,9 +19,6 @@ public class XJunctionRule_FirstComeFirstServe : IXJunctionRules
         // _agentsInEntry = null;
         _agentsInJunction = null;
 
-        // Debug
-        Debug.Log("#allAgentsInJunction = " + allAgentsInJunction.Count);
-
         foreach (var agent in allAgentsInJunction)
         {
             agent.IsStopped = isJunctionOccupied;
@@ -29,6 +26,7 @@ public class XJunctionRule_FirstComeFirstServe : IXJunctionRules
 
         if (allAgentsInJunction.Count > 0)
         {
+            Debug.Log("Agent '" + allAgentsInJunction[0] + "' may drive first!");
             allAgentsInJunction[0].IsStopped = false;
         }
     }

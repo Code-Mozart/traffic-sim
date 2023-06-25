@@ -1498,7 +1498,7 @@ GameObject:
   - component: {fileID: 1788503570210819997}
   - component: {fileID: 8192081041587734215}
   - component: {fileID: 7814937374510040564}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: ConnectorNode (1)
   m_TagString: ConnectorNode
   m_Icon: {fileID: 0}
@@ -3247,7 +3247,7 @@ GameObject:
   - component: {fileID: 2245272675853626444}
   - component: {fileID: 4247336794558373973}
   - component: {fileID: 9194159788751744239}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: HookNode
   m_TagString: HookNode
   m_Icon: {fileID: 0}

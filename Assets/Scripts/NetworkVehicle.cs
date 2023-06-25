@@ -33,11 +33,11 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
 	private void Start()
 	{
-        ResetToNearest();
+        ResetToRandom();
 	}
 
-	private void Update()
-	{
+    private void Update()
+    {
         UpdateRoute();
         UpdateSteering();
         UpdatePhysics();
@@ -60,7 +60,8 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     bool INetworkAgent.HasReachedDestination => _route.Count == 1;
 
-    float INetworkAgent.RemainingDistance {
+    float INetworkAgent.RemainingDistance
+    {
         get
         {
             var sum = 0.0f;
@@ -96,12 +97,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     bool INetworkAgent.IsStopped
     {
         get => _isStopped;
-        //set => _isStopped = value;
-        set
-        {
-            _isStopped = value;
-            this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
-        }
+        set => _isStopped = value;
+        // set
+        // {
+        //     _isStopped = value;
+        //     this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
+        // }
     }
 
     System.Action<NetworkNode> INetworkAgent.OnNodeReached
@@ -134,6 +135,11 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     private void UpdatePhysics()
     {
+        if (!((INetworkAgent)this).Next)
+        {
+            return;
+        }
+
         transform.position = Vector3.MoveTowards(transform.position, ((INetworkAgent)this).Next.transform.position, _velocity * Time.deltaTime);
         transform.Rotate(Vector3.up, _angularVelocity * Time.deltaTime);
     }
@@ -141,13 +147,14 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     private void UpdateRoute()
     {
         // Debug: Draw route
+        print(_route.Count);
         for (int i = 1; i < _route.Count; i++)
         {
             var segmentStart = _route[i - 1].transform.position;
             var segmentEnd = _route[i].transform.position;
             Debug.DrawLine(segmentStart, segmentEnd, Color.cyan);
         }
-        
+
         if (((INetworkAgent)this).HasReachedDestination)
         {
             ResetToRandom();
@@ -168,15 +175,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     private void UpdateJunction()
     {
         var previousJunction = ((INetworkAgent)this).Previous?.transform?.GetComponentInParent<XJunction>();
-        if (previousJunction)
-        {
-            previousJunction.RemoveAgent(this);
-        }
-
         var nextJunction = ((INetworkAgent)this).Next?.transform?.GetComponentInParent<XJunction>();
-        if (nextJunction)
+
+        if (nextJunction != previousJunction)
         {
-            nextJunction.AddAgent(this);
+            previousJunction?.RemoveAgent(this);
+            nextJunction?.AddAgent(this);
         }
     }
 
@@ -240,15 +244,17 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     private void ResetToNearest()
     {
+        Reset();
+
         var startNode = FindNearestNodeInNetwork();
         ((INetworkAgent)this).Route = CreateRandomRoute(startNode);
+
+        transform.position = startNode.transform.position;
         transform.forward = ToNext();
     }
 
     private NetworkNode FindNearestNodeInNetwork()
     {
-        Reset();
-
         var nearestSoFar = network.nodes[0];
         var minDistance = Vector3.Distance(transform.position, nearestSoFar.transform.position);
         foreach (var node in network.nodes)
@@ -269,7 +275,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         {
             return null;
         }
-        
+
         var randomIndex = Random.Range(0, nodes.Count);
         return nodes[randomIndex];
     }
@@ -293,7 +299,13 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     private Vector3 ToNext()
     {
-        var toNext = ((INetworkAgent)this).Next.transform.position - transform.position;
+        var next = ((INetworkAgent)this).Next;
+        if (!next)
+        {
+            return transform.forward;
+        }
+
+        var toNext = next.transform.position - transform.position;
         toNext = new Vector3(toNext.x, 0.0f, toNext.z);
         return toNext;
     }
@@ -337,7 +349,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     //: Private variables
 
     [Header("Private Variables")]
-    
+
     private float _velocity;
     private float _angularVelocity;
     private float _turnTimer;

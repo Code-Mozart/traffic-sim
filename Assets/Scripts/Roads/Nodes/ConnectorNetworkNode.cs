@@ -9,9 +9,15 @@ public class ConnectorNetworkNode : NetworkNode
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, 0.25f);
         FindNearbyHookNodes();
         NodeOutOfRange();
+
+        Gizmos.DrawWireSphere(transform.position, 0.25f);
+        foreach (HookNetworkNode node in destinations)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position, node.transform.position);
+        }
     }
 
     private void FindNearbyHookNodes()
@@ -25,17 +31,13 @@ public class ConnectorNetworkNode : NetworkNode
             {
                 // Verbinde den aktuellen ConnectorNode mit dem gefundenen HookNode
                 ConnectToHookNode(hookNode);
-                foreach (HookNetworkNode node in destinations) {
-                    Gizmos.color = Color.green;
-                    Gizmos.DrawLine(transform.position, node.transform.position);
-                }
             }
         }
     }
 
     private void ConnectToHookNode(HookNetworkNode hookNode)
     {
-        if (!destinations.Contains(hookNode)) 
+        if (!destinations.Contains(hookNode))
             destinations.Add(hookNode);
     }
 
@@ -46,7 +48,8 @@ public class ConnectorNetworkNode : NetworkNode
             if (node == null)
             {
                 destinations.Remove(node);
-            } else if (Vector3.Distance(node.transform.position, transform.position) > searchRadius)
+            }
+            else if (Vector3.Distance(node.transform.position, transform.position) > searchRadius)
             {
                 destinations.Remove(node);
             }
