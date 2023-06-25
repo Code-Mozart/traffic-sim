@@ -20,17 +20,20 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     public float maxSpeed;
     [Tooltip("The time it takes the vehicle to turn to any angle in seconds.")]
     public float turnTime;
+    [Tooltip("The multiplier on the speed limit for the minimum speed while turning")]
+    public float minTurnSpeedMultiplier;
 
     [Header("Thresholds")]
 
     public float nodeReachedThreshold;
     public int maxResetAttempts = 100;
+    public int maxRouteLength = 1000;
 
     //: Unity Callbacks
 
 	private void Start()
 	{
-        Reset();
+        ResetToNearest();
 	}
 
 	private void Update()
@@ -93,7 +96,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     bool INetworkAgent.IsStopped
     {
         get => _isStopped;
-        set => _isStopped = value;
+        //set => _isStopped = value;
+        set
+        {
+            _isStopped = value;
+            this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
+        }
     }
 
     System.Action<NetworkNode> INetworkAgent.OnNodeReached
@@ -142,17 +150,33 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         
         if (((INetworkAgent)this).HasReachedDestination)
         {
-            Reset();
+            ResetToRandom();
             return;
         }
 
         if (ToNext().magnitude <= nodeReachedThreshold)
         {
+            UpdateJunction();
+
             _route.RemoveAt(0);
 
-            var angleDifference = Vector3.SignedAngle(transform.forward, ToNext(), Vector3.up);
-            _angularVelocity = angleDifference / turnTime;
+            _angularVelocity = SignedAngleToNext() / turnTime;
             _turnTimer = turnTime;
+        }
+    }
+
+    private void UpdateJunction()
+    {
+        var previousJunction = ((INetworkAgent)this).Previous?.transform?.GetComponentInParent<XJunction>();
+        if (previousJunction)
+        {
+            previousJunction.RemoveAgent(this);
+        }
+
+        var nextJunction = ((INetworkAgent)this).Next?.transform?.GetComponentInParent<XJunction>();
+        if (nextJunction)
+        {
+            nextJunction.AddAgent(this);
         }
     }
 
@@ -167,22 +191,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
             return;
         }
 
-        float desiredSpeed;
-        var distanceToBreak = Kinematics.s(v: _velocity, a: deceleration);
-        Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
-
-        // Debug: Draw velocity
-        Debug.DrawRay(transform.position + 0.01f * Vector3.down, transform.forward * distanceToBreak, Color.red);
-
-        if (((INetworkAgent)this).RemainingDistance <= distanceToBreak)
-        {
-            desiredSpeed = 0.0f;
-        }
-        else
-        {
-            desiredSpeed = Mathf.Min(maxSpeed, _speedLimit);
-        }
-
+        float desiredSpeed = CalculateDesiredSpeed();
         if (_velocity > desiredSpeed)
         {
             _velocity = Mathf.MoveTowards(_velocity, desiredSpeed, deceleration * Time.deltaTime);
@@ -201,6 +210,11 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
         _speedLimit = maxSpeed;
         _isStopped = false;
+    }
+
+    private void ResetToRandom()
+    {
+        Reset();
 
         NetworkNode startNode = null;
         for (int i = 0; i < maxResetAttempts; i++)
@@ -224,6 +238,31 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         transform.forward = ToNext();
     }
 
+    private void ResetToNearest()
+    {
+        var startNode = FindNearestNodeInNetwork();
+        ((INetworkAgent)this).Route = CreateRandomRoute(startNode);
+        transform.forward = ToNext();
+    }
+
+    private NetworkNode FindNearestNodeInNetwork()
+    {
+        Reset();
+
+        var nearestSoFar = network.nodes[0];
+        var minDistance = Vector3.Distance(transform.position, nearestSoFar.transform.position);
+        foreach (var node in network.nodes)
+        {
+            var distance = Vector3.Distance(transform.position, node.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestSoFar = node;
+            }
+        }
+        return nearestSoFar;
+    }
+
     private NetworkNode RandomNode(List<NetworkNode> nodes)
     {
         if (nodes.Count <= 0)
@@ -241,7 +280,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         route.Add(start);
 
         var currentLast = start;
-        while (currentLast.destinations.Count > 0)
+        for (int i = 0; i < maxRouteLength && currentLast.destinations.Count > 0; i++)
         {
             var nextNode = RandomNode(currentLast.destinations);
             // nextNode cant be null with the current implementation of RandomNode()
@@ -257,6 +296,42 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         var toNext = ((INetworkAgent)this).Next.transform.position - transform.position;
         toNext = new Vector3(toNext.x, 0.0f, toNext.z);
         return toNext;
+    }
+
+    private float SignedAngleToNext()
+    {
+        return Vector3.SignedAngle(transform.forward, ToNext(), Vector3.up);
+    }
+
+    private float CalculateDesiredSpeed()
+    {
+        var distanceToBreak = Kinematics.s(v: _velocity, a: deceleration);
+        //Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
+
+        // Debug: Draw velocity
+        Debug.DrawRay(transform.position + 0.01f * Vector3.down, transform.forward * distanceToBreak, Color.red);
+
+        if (((INetworkAgent)this).RemainingDistance <= distanceToBreak)
+        {
+            return 0.0f;
+        }
+
+        var desiredSpeed = Mathf.Min(maxSpeed, _speedLimit);
+        var distanceToNext = ToNext().magnitude;
+
+        if (_route.Count > 2 && distanceToNext <= distanceToBreak)
+        {
+            var toOneAfter = _route[2].transform.position - _route[1].transform.position;
+            var dot = Vector3.Dot(transform.forward, toOneAfter.normalized);
+            var desiredTurnSpeed = Mathf.Max(dot * desiredSpeed, minTurnSpeedMultiplier * _speedLimit);
+            var distanceToTurnSpeed = Kinematics.s(v: _velocity - desiredTurnSpeed, a: deceleration);
+            if (distanceToTurnSpeed <= distanceToNext)
+            {
+                return desiredTurnSpeed;
+            }
+        }
+        
+        return desiredSpeed;
     }
 
     //: Private variables
