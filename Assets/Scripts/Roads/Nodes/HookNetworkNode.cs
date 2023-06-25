@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class HookNetworkNode : NetworkNode
 {
-    public float searchRadius = 3.0f;
+    public float searchRadius = 1.0f;
     public LayerMask ConnectorNodeLayer;
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, 0.5f);
         FindNearbyConnectorNodes();
         NodeOutOfRange();
+        
+        Gizmos.DrawWireSphere(transform.position, 0.25f);
     }
 
     private void FindNearbyConnectorNodes()
@@ -39,7 +40,10 @@ public class HookNetworkNode : NetworkNode
     {
         foreach (ConnectorNetworkNode node in origins.ToArray())
         {
-            if (Vector3.Distance(node.transform.position, transform.position) > searchRadius)
+            if(node == null)
+            {
+                origins.Remove(node);
+            } else if (Vector3.Distance(node.transform.position, transform.position) > searchRadius)
             {
                 origins.Remove(node);
             }
