@@ -97,12 +97,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     bool INetworkAgent.IsStopped
     {
         get => _isStopped;
-        //set => _isStopped = value;
-        set
-        {
-            _isStopped = value;
-            this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
-        }
+        set => _isStopped = value;
+        // set
+        // {
+        //     _isStopped = value;
+        //     this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
+        // }
     }
 
     System.Action<NetworkNode> INetworkAgent.OnNodeReached
