@@ -27,13 +27,14 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
     public float nodeReachedThreshold;
     public int maxResetAttempts = 100;
+    public int maxRouteLength = 1000;
 
     //: Unity Callbacks
 
-    private void Start()
-    {
-        Reset();
-    }
+	private void Start()
+	{
+        ResetToNearest();
+	}
 
     private void Update()
     {
@@ -96,7 +97,12 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     bool INetworkAgent.IsStopped
     {
         get => _isStopped;
-        set => _isStopped = value;
+        //set => _isStopped = value;
+        set
+        {
+            _isStopped = value;
+            this.GetComponent<MeshRenderer>().materials[0].color = _isStopped ? Color.red : Color.white;
+        }
     }
 
     System.Action<NetworkNode> INetworkAgent.OnNodeReached
@@ -146,16 +152,33 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
         if (((INetworkAgent)this).HasReachedDestination)
         {
-            Reset();
+            ResetToRandom();
             return;
         }
 
         if (ToNext().magnitude <= nodeReachedThreshold)
         {
+            UpdateJunction();
+
             _route.RemoveAt(0);
 
             _angularVelocity = SignedAngleToNext() / turnTime;
             _turnTimer = turnTime;
+        }
+    }
+
+    private void UpdateJunction()
+    {
+        var previousJunction = ((INetworkAgent)this).Previous?.transform?.GetComponentInParent<XJunction>();
+        if (previousJunction)
+        {
+            previousJunction.RemoveAgent(this);
+        }
+
+        var nextJunction = ((INetworkAgent)this).Next?.transform?.GetComponentInParent<XJunction>();
+        if (nextJunction)
+        {
+            nextJunction.AddAgent(this);
         }
     }
 
@@ -189,6 +212,11 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
 
         _speedLimit = maxSpeed;
         _isStopped = false;
+    }
+
+    private void ResetToRandom()
+    {
+        Reset();
 
         NetworkNode startNode = null;
         for (int i = 0; i < maxResetAttempts; i++)
@@ -212,6 +240,31 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         transform.forward = ToNext();
     }
 
+    private void ResetToNearest()
+    {
+        var startNode = FindNearestNodeInNetwork();
+        ((INetworkAgent)this).Route = CreateRandomRoute(startNode);
+        transform.forward = ToNext();
+    }
+
+    private NetworkNode FindNearestNodeInNetwork()
+    {
+        Reset();
+
+        var nearestSoFar = network.nodes[0];
+        var minDistance = Vector3.Distance(transform.position, nearestSoFar.transform.position);
+        foreach (var node in network.nodes)
+        {
+            var distance = Vector3.Distance(transform.position, node.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestSoFar = node;
+            }
+        }
+        return nearestSoFar;
+    }
+
     private NetworkNode RandomNode(List<NetworkNode> nodes)
     {
         if (nodes.Count <= 0)
@@ -229,7 +282,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
         route.Add(start);
 
         var currentLast = start;
-        while (currentLast.destinations.Count > 0)
+        for (int i = 0; i < maxRouteLength && currentLast.destinations.Count > 0; i++)
         {
             var nextNode = RandomNode(currentLast.destinations);
             // nextNode cant be null with the current implementation of RandomNode()
@@ -255,7 +308,7 @@ public class NetworkVehicle : MonoBehaviour, INetworkAgent
     private float CalculateDesiredSpeed()
     {
         var distanceToBreak = Kinematics.s(v: _velocity, a: deceleration);
-        Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
+        //Debug.Log("distanceToBreak = " + distanceToBreak + ", remainingDistance = " + ((INetworkAgent)this).RemainingDistance);
 
         // Debug: Draw velocity
         Debug.DrawRay(transform.position + 0.01f * Vector3.down, transform.forward * distanceToBreak, Color.red);
