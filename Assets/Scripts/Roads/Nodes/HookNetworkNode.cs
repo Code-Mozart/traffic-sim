@@ -7,6 +7,11 @@ public class HookNetworkNode : NetworkNode
     public float searchRadius = 1.0f;
     public LayerMask ConnectorNodeLayer;
 
+    private void Awake()
+    {
+        FindNearbyConnectorNodes();
+    }
+
     private void OnDrawGizmos()
     {
         FindNearbyConnectorNodes();

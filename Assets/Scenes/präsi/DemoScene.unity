@@ -1425,13 +1425,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2115340524, guid: 1d326ab71630b4d6eb4fe282fd6d979d, type: 3}
+      propertyPath: network
+      value: 
+      objectReference: {fileID: 1252922869}
     - target: {fileID: 3875853168755712039, guid: 1d326ab71630b4d6eb4fe282fd6d979d, type: 3}
       propertyPath: m_Name
       value: Traffic Agent Variant
       objectReference: {fileID: 0}
     - target: {fileID: 4504192570824456861, guid: 1d326ab71630b4d6eb4fe282fd6d979d, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4504192570824456861, guid: 1d326ab71630b4d6eb4fe282fd6d979d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2446,7 +2450,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1028766147
 PrefabInstance:
@@ -3138,7 +3142,7 @@ Transform:
   - {fileID: 1334927488}
   - {fileID: 320052491}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1290162288
 GameObject:
@@ -3232,7 +3236,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &1312318061
 PrefabInstance:
