@@ -19,4 +19,4 @@ Wir haben Erfahrungen in Metaprogramming sammeln können über die Nutzung von G
 ## Verwendete Assets, Codefragmente und Inspirition:
 Für das ganze Projekt haben wir keinerlei Tutorials oder Codefragmente genutzt. Der gesamte Code wurde von uns selbst geschrieben. Das Automodell haben wir in Blender erstellt gehabt, während wir die Straßentiles in kleineren Fragmenten aus einem Polygon City Package genommen haben (https://assetstore.unity.com/packages/3d/environments/urban/city-package-107224).
 ## Video:
-Link:   
+Link: https://youtu.be/lqFHw1oBx9c 
